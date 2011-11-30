@@ -16,25 +16,28 @@ import os
 import imdb
 
 
-def dump(movie, fields, commas = False):
+def dump(movie, fields, commas=False):
     first = True
     for f in fields:
-        if f in movie:
-            if first:
-                print "%s: " % (f.upper(),),
-            else:
-                print "(",
-            if type(movie[f]) == list:
-                for i in movie[f] [ 0 : min(5, len(movie[f])) ]:
-                    if commas:
-                        print "%s," % (i,),
-                    else:
-                        print "%s" % (i,),
-            else:
-                print "%s" % (movie[f],),
-            if not first:
-                print ")",
-            first = False
+        if not movie.get(f, None):
+            print "No", f
+            continue
+
+        if first:
+            print "%s: " % (f.upper(),),
+        else:
+            print "(",
+        if type(movie[f]) == list:
+            for i in movie[f] [ 0 : min(5, len(movie[f])) ]:
+                if commas:
+                    print "%s," % (i,),
+                else:
+                    print "%s" % (i,),
+        else:
+            print "%s" % (movie[f],),
+        if not first:
+            print ")",
+        first = False
     if not first:
         print
 
