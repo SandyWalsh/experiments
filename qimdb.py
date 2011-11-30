@@ -1,11 +1,25 @@
+"""
+To mount, let's say \\Workstation\ShareName
+sudo apt-get install samba4-clients
+Find IP address for Stuff: nmblookup Workstation
+sudo apt-get install smbfs
+sudo mkdir /mnt/ShareName
+sudo mount -t cifs 192.168.2.xxx:ShareName /mnt/ShareName
+"""
+
+try:
+    from local_settings import SHARE_NAME
+except ImportError:
+    SHARE_NAME = r"/mnt/ShareName"
+
 import os
 import imdb
-svr = imdb.IMDb()
+
 
 def dump(movie, fields, commas = False):
     first = True
     for f in fields:
-        if movie.has_key(f):
+        if f in movie:
             if first:
                 print "%s: " % (f.upper(),),
             else:
@@ -24,8 +38,9 @@ def dump(movie, fields, commas = False):
     if not first:
         print
 
-root = r"\\stuff\sandbox\Movies"
-for root, dirs, files in os.walk(root):
+
+svr = imdb.IMDb()
+for root, dirs, files in os.walk(SHARE_NAME):
     print root
     for file in files:
         copy = file
@@ -33,7 +48,7 @@ for root, dirs, files in os.walk(root):
         if file[-4:] != '.avi':
             continue
 
-        file = file[:-4] # remove .avi
+        file = file[:-4]  # remove .avi
         file = file.replace(" ", ".")
         parts = file.split(".")
         search = " ".join(parts)
