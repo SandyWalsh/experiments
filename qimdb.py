@@ -20,7 +20,6 @@ def dump(movie, fields, commas=False):
     first = True
     for f in fields:
         if not movie.get(f, None):
-            print "No", f
             continue
 
         if first:
@@ -59,8 +58,9 @@ for root, dirs, files in os.walk(SHARE_NAME):
         print "Was: %s now '%s'" % (copy, search)
         for movie in svr.search_movie(search)[:1]:
             svr.update(movie)
-            dump(movie, ['title', 'year', 'rating'])
-            dump(movie, ['genre'])
-            dump(movie, ['plot'])
+            # print "DICT", movie.data.keys()
+            dump(movie, ['title', 'year', 'rating', 'genre', 'runtimes'])
+            dump(movie, ['full-size cover url'])
+            # dump(movie, ['plot'])
             dump(movie, ['cast'], commas = True)
             print "-------------------------------------------------------------------"
